@@ -1,34 +1,29 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import React, { Suspense } from "react";
+import { BrowserRouter, Route, Link, Routes, Navigate } from "react-router-dom";
+import "./App.scss";
+import Header from "./components/Header";
+import NotFound from "./components/NotFound";
+
+// Lazy load - Code splitting
+const Photo = React.lazy(() => import("./features/Photo"));
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+    <div className="photo-app">
+      <Suspense fallback={<div>Loading ...</div>}>
+        <BrowserRouter>
+          <Header />
+
+          <Routes>
+            {/* <Navigate replace to="/photo" /> */}
+
+            <Route path="/photos/*" element={<Photo />} />
+            <Route element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </Suspense>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
